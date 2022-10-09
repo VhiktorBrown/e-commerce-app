@@ -68,6 +68,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 
+    //Jetpack's Navigation Component
+    implementation "androidx.navigation:navigation-fragment-ktx:2.5.2"
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.2"
+
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
