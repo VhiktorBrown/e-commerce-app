@@ -3,7 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/VICTOR/AndroidStudioProjects/Ecommerce/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/VICTOR/AndroidStudioProjects/Ecommerce/app/src/main/res/drawable/background_white.xml" value="0.1962962962962963" />
+        <entry key="..\:/Users/VICTOR/AndroidStudioProjects/Ecommerce/app/src/main/res/drawable/button.xml" value="0.1962962962962963" />
+        <entry key="..\:/Users/VICTOR/AndroidStudioProjects/Ecommerce/app/src/main/res/drawable/curved_background.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/VICTOR/AndroidStudioProjects/Ecommerce/app/src/main/res/drawable/ic_home.xml" value="0.1962962962962963" />
+        <entry key="..\:/Users/VICTOR/AndroidStudioProjects/Ecommerce/app/src/main/res/layout/activity_main.xml" value="0.15" />
+        <entry key="..\:/Users/VICTOR/AndroidStudioProjects/Ecommerce/app/src/main/res/layout/activity_product_detail.xml" value="0.18" />
+        <entry key="..\:/Users/VICTOR/AndroidStudioProjects/Ecommerce/app/src/main/res/layout/brand_item.xml" value="0.18" />
+        <entry key="..\:/Users/VICTOR/AndroidStudioProjects/Ecommerce/app/src/main/res/layout/fragment_cart.xml" value="0.12273550724637682" />
+        <entry key="..\:/Users/VICTOR/AndroidStudioProjects/Ecommerce/app/src/main/res/layout/fragment_favorite.xml" value="0.12273550724637682" />
+        <entry key="..\:/Users/VICTOR/AndroidStudioProjects/Ecommerce/app/src/main/res/layout/fragment_home.xml" value="0.18" />
+        <entry key="..\:/Users/VICTOR/AndroidStudioProjects/Ecommerce/app/src/main/res/layout/fragment_profile.xml" value="0.12273550724637682" />
+        <entry key="..\:/Users/VICTOR/AndroidStudioProjects/Ecommerce/app/src/main/res/layout/product_item.xml" value="0.18" />
+        <entry key="..\:/Users/VICTOR/AndroidStudioProjects/Ecommerce/app/src/main/res/menu/menu_main.xml" value="0.203125" />
       </map>
     </option>
   </component>

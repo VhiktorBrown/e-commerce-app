@@ -2,6 +2,7 @@ package com.theelitedevelopers.ecommerce.domain.usecases
 
 import com.theelitedevelopers.ecommerce.domain.model.Product
 import com.theelitedevelopers.ecommerce.domain.repository.ProductRepository
+import com.theelitedevelopers.ecommerce.presentation.home.products.ProductsScreenState
 import com.theelitedevelopers.ecommerce.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -10,7 +11,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 class ProductUseCases @Inject constructor(
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    //private val productsScreenState: ProductsScreenState
 ) {
 
     //Function that fetches all products from the server
@@ -43,7 +45,6 @@ class ProductUseCases @Inject constructor(
                 list.add(product)
             }
         }
-
         emit(Resource.Success(list))
     }
 
