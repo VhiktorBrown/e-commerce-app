@@ -4,16 +4,19 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.theelitedevelopers.ecommerce.R
-import com.theelitedevelopers.ecommerce.databinding.BrandItemBinding
 import com.theelitedevelopers.ecommerce.databinding.ProductItemBinding
 import com.theelitedevelopers.ecommerce.domain.model.Product
-import com.theelitedevelopers.ecommerce.presentation.home.fragments.interfaces.OnItemClicked
 import com.theelitedevelopers.ecommerce.presentation.home.productDetail.ProductDetailActivity
 import com.theelitedevelopers.ecommerce.utils.Constants
+
+/**
+ * @created 08/10/2022 - 6:53 PM
+ * @project Ecommerce app
+ * @author The Elite Developers
+ */
 
 class ProductAdapter(var context : Context, var productList : List<Product>
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
@@ -34,9 +37,15 @@ class ProductAdapter(var context : Context, var productList : List<Product>
         holder.binding.productPrice.text = productList[position].addPriceSign()
         holder.binding.productType.text = productList[position].productType
 
-        //Load the Product Image
+        /**
+         * Load the Product Image
+         *
+         * The images were not loading because
+         * they didn't have the 'http' prefix.
+         * So, I added it.
+         */
         Picasso.get()
-            .load(productList[position].featuredImage)
+            .load("http:" +productList[position].featuredImage)
             .placeholder(R.drawable.ecommerce)
             .into(holder.binding.productImage)
 

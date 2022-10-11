@@ -10,9 +10,14 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
+/**
+ * @created 09/10/2022 - 06:03 PM
+ * @project Ecommerce app
+ * @author The Elite Developers
+ */
+
 class ProductUseCases @Inject constructor(
     private val productRepository: ProductRepository,
-    //private val productsScreenState: ProductsScreenState
 ) {
 
     //Function that fetches all products from the server
@@ -30,19 +35,30 @@ class ProductUseCases @Inject constructor(
 
     //Function that sifts through and fetches only products related to a specific brand
     fun fetchBrandProducts(brand : String, products : List<Product>) : Flow<Resource<List<Product>>> = flow {
-        val list : MutableList<Product> = mutableListOf();
+        var list : MutableList<Product> = mutableListOf();
 
         /**
-         * Looping through the Product List, we
-         * look for products that have the brand
-         * name that has been passed to this function
-         * and then add these brand products to a new
-         * list, then return it.
+         * The 'All' brand name should display
+         * all products. If it is any other
+         * brand name, then we loop through
+         * the product list to fetch all products
+         * associated with that brand name.
          */
+        if(brand == "All"){
+            list = products.toMutableList()
+        }else {
+            /**
+             * Looping through the Product List, we
+             * look for products that have the brand
+             * name that has been passed to this function
+             * and then add these brand products to a new
+             * list, then return it.
+             */
 
-        for(product in products){
-            if(product.brand == brand){
-                list.add(product)
+            for(product in products){
+                if(product.brand == brand){
+                    list.add(product)
+                }
             }
         }
         emit(Resource.Success(list))
@@ -53,12 +69,19 @@ class ProductUseCases @Inject constructor(
         val brandNames : MutableList<String> = mutableListOf()
 
         //This variable tracks if a brand name already exists in the new list
-        var exists : Boolean = false;
+        var exists = false;
         /**
          * Here, we need to fetch the Brands from the bulky
          * Product List. We loop through the list fetching just
          * brand names.
          */
+
+        /**
+         * This brand Category(ALL) is going to be
+         * responsible for displaying all the
+         * products by all teh brands
+         */
+        brandNames.add("All")
 
         for(product in products){
             for(item in brandNames){
@@ -84,6 +107,8 @@ class ProductUseCases @Inject constructor(
             exists = false
 
             //The Parent iteration continues....
+
+            emit(Resource.Success(brandNames))
         }
     }
 }

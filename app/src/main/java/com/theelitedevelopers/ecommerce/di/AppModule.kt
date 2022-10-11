@@ -18,7 +18,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
-//    @Provides
-//    @Singleton
-//    fun providesProductRepository() : ProductRepository = ProductRepositoryImpl()
+
+    //TODO Discarding this class because I have no need for it
 }
