@@ -66,5 +66,8 @@ class ProductDetailActivity : AppCompatActivity() {
             .placeholder(R.drawable.ecommerce)
             .into(binding!!.productImage)
 
+        binding?.backArrow?.setOnClickListener {
+            onBackPressed()
+        }
     }
 }

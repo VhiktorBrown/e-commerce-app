@@ -106,7 +106,8 @@ class HomeFragment : Fragment(), OnItemClicked {
          *  we fetch only products that are
          * associated with that brand.
          */
-        productsViewModel.fetchBrandProducts(brandName, productsViewModel.fetchProductData().value!!.products)
-
+//        productsViewModel.fetchBrandProducts(brandName, productsViewModel.fetchProductData().value!!.products)
+//        productAdapter = ProductAdapter(requireActivity(), productsViewModel.fetchProductData().value!!.brandProducts)
+//        binding?.productsRecyclerView?.adapter = productAdapter
     }
 }

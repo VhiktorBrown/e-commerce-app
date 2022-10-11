@@ -58,20 +58,20 @@ class BrandAdapter(var context : Context, var brandList : List<String>,
         }
 
 
-        holder.binding.root.setOnClickListener {
-            var position = holder.adapterPosition
-
-            /**
-             * This sets the currently selected position
-             * and reflects that to the HomeFragment
-             */
-            if(position != RecyclerView.NO_POSITION){
-                listener.OnClicked(brandList[position])
-                notifyItemChanged(selectedPosition)
-                selectedPosition = position
-                notifyItemChanged(selectedPosition)
-            }
-        }
+//        holder.binding.root.setOnClickListener {
+//            var position = holder.adapterPosition
+//
+//            /**
+//             * This sets the currently selected position
+//             * and reflects that to the HomeFragment
+//             */
+//            if(position != RecyclerView.NO_POSITION){
+//                listener.OnClicked(brandList[position])
+//                notifyItemChanged(selectedPosition)
+//                selectedPosition = position
+//                notifyItemChanged(selectedPosition)
+//            }
+//        }
     }
 
     fun setSelectedIndex(position: Int){
