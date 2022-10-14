@@ -26,6 +26,11 @@ jobs:
         with:
           java-version: 1.8
 
+      - name: Build with Gradle
+        run: |
+            ./gradlew wrapper --gradle-version=7.2
+            ./gradlew build
+
       # This is where we call the gradle command that builds the app
       - name: Build App
         run: ./gradlew assembleDebug

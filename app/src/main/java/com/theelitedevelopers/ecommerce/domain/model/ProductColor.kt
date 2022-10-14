@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class ProductColor(
     @SerializedName("hex_value")
-    val hexValue : String,
+    val hexValue : String?,
     @SerializedName("colour_name")
-    val colorName : String,
+    val colorName : String?,
 ) : Parcelable

@@ -34,7 +34,7 @@ class ProductUseCases @Inject constructor(
     }
 
     //Function that sifts through and fetches only products related to a specific brand
-    fun fetchBrandProducts(brand : String, products : List<Product>) : Flow<Resource<List<Product>>> = flow {
+    fun fetchBrandProducts(brand : String, products : List<Product>) : Flow<Resource<List<Product>>> = flow  {
         var list : MutableList<Product> = mutableListOf();
 
         /**
@@ -44,24 +44,29 @@ class ProductUseCases @Inject constructor(
          * the product list to fetch all products
          * associated with that brand name.
          */
-        if(brand == "All"){
-            list = products.toMutableList()
-        }else {
-            /**
-             * Looping through the Product List, we
-             * look for products that have the brand
-             * name that has been passed to this function
-             * and then add these brand products to a new
-             * list, then return it.
-             */
+        try{
+            emit(Resource.Loading())
+            if(brand == "All"){
+                list = products.toMutableList()
+            }else {
+                /**
+                 * Looping through the Product List, we
+                 * look for products that have the brand
+                 * name that has been passed to this function
+                 * and then add these brand products to a new
+                 * list, then return it.
+                 */
 
-            for(product in products){
-                if(product.brand == brand){
-                    list.add(product)
+                for(product in products){
+                    if(product.brand == brand){
+                        list.add(product)
+                    }
                 }
             }
+            emit(Resource.Success(list))
+        }catch (e : IOException){
+            emit(Resource.Error(message = "Could not fetch products", data = null))
         }
-        emit(Resource.Success(list))
     }
 
 

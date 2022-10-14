@@ -56,7 +56,9 @@ class ProductDetailActivity : AppCompatActivity() {
 
         binding!!.productName.text = product?.name
         binding!!.brand.text = product?.brand
-        binding!!.category.text = product?.productType
+        if(product?.category != null){
+            binding!!.category.text = product?.productType
+        }
         binding!!.description.text = product?.description
         binding!!.productPrice.text = product?.addPriceSign()
 

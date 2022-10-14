@@ -1,5 +1,6 @@
 package com.theelitedevelopers.ecommerce.presentation.home.fragments.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -56,6 +57,11 @@ class ProductAdapter(var context : Context, var productList : List<Product>
         }
     }
 
+     @SuppressLint("NotifyDataSetChanged")
+     fun setList(list : List<Product>){
+        productList = list
+        notifyDataSetChanged()
+    }
 
     override fun getItemCount(): Int {
         return productList.size

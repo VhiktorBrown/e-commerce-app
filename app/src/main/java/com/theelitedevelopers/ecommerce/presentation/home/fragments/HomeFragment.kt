@@ -30,6 +30,9 @@ class HomeFragment : Fragment(), OnItemClicked {
     private var productAdapter : ProductAdapter? = null
     private val binding get() = _binding
     private val productsViewModel : ProductsViewModel by viewModels()
+    private lateinit var productLayoutManager : RecyclerView.LayoutManager
+    private lateinit var brandLayoutManager : LinearLayoutManager
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,12 +48,14 @@ class HomeFragment : Fragment(), OnItemClicked {
 
     private fun initViews(){
         //Initialize Layout Manager for Products List
-        val productLayoutManager : RecyclerView.LayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        productLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding?.productsRecyclerView?.layoutManager = productLayoutManager
+        binding?.productsRecyclerView?.hasFixedSize()
 
         //Initialize LayoutManager for Brands List
-        val brandLayoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        brandLayoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         binding?.brandsRecyclerView?.layoutManager = brandLayoutManager
+        binding?.brandsRecyclerView?.hasFixedSize()
 
         productsViewModel.fetchProductData().observe(viewLifecycleOwner, {
             //once any change has been made to the Product list...
@@ -64,15 +69,34 @@ class HomeFragment : Fragment(), OnItemClicked {
                 showProgressBar()
             }else {
                 hideProgressBar()
+            }
 
-                if(it.products.isNotEmpty()){
-                    productAdapter = ProductAdapter(requireActivity(), it.products)
+            /**
+             * Firstly, we check if the Adapter has been
+             * initialized before. If it has not, we initialise it
+             * If it has, we just set add the new list to our
+             * adapter and call notifyDataSetChanged().
+             */
+            if(productAdapter != null){
+                productAdapter!!.setList(it.brandProducts)
+            }else {
+                if(it.brandProducts.isNotEmpty()){
+                    productAdapter = ProductAdapter(requireActivity(), it.brandProducts)
                     binding?.productsRecyclerView?.adapter = productAdapter
                 }
+            }
 
+
+            //As long as it has not been fetched, keep checking if it's empty or not.
+            //This variable is responsible for telling us if the brandNames have already been fetched.
+            //If it has not, we initialize our Brand Adapter only once
+            if(!it.fetchedBrandNames){
                 if(it.brandNames.isNotEmpty()){
                     brandAdapter = BrandAdapter(requireActivity(), it.brandNames, this)
                     binding?.brandsRecyclerView?.adapter = brandAdapter
+
+                    //Once added, set it to true - telling our viewModel to register that our BrandNames have been fetched
+                    productsViewModel.setFetchedBrandNamesValue()
                 }
             }
         })
@@ -83,21 +107,18 @@ class HomeFragment : Fragment(), OnItemClicked {
             showProgressBar()
             productsViewModel.fetchProducts()
         }
-
     }
 
     private fun hideProgressBar(){
         binding?.progressBar?.visibility = View.GONE
-        binding?.productsRecyclerView?.visibility = View.VISIBLE
     }
 
     private fun showProgressBar(){
         binding?.progressBar?.visibility = View.VISIBLE
         binding?.retryButton?.visibility = View.GONE
-        binding?.productsRecyclerView?.visibility = View.GONE
     }
 
-    override fun OnClicked(brandName: String) {
+    override fun OnClicked(brandName: String, position : Int) {
         /**
          * Here, we'll receive the current brandName from the
          * Recycler View - that displays list of brands.
@@ -106,8 +127,33 @@ class HomeFragment : Fragment(), OnItemClicked {
          *  we fetch only products that are
          * associated with that brand.
          */
-//        productsViewModel.fetchBrandProducts(brandName, productsViewModel.fetchProductData().value!!.products)
-//        productAdapter = ProductAdapter(requireActivity(), productsViewModel.fetchProductData().value!!.brandProducts)
-//        binding?.productsRecyclerView?.adapter = productAdapter
+
+        //calls the function responsible for fetching products that belong this Brand
+        productsViewModel.fetchBrandProducts(brandName)
+    }
+
+    /**
+     * So, if User leaves this fragment and
+     * later returns back to it, naturally our
+     * data is no longer visible on the fragment.
+     *
+     * So, we use this function to restore our data
+     * to it's previous state. Thanks to our ViewModel
+     * that has been handling State Management since 1896.
+     */
+
+    private fun displayInForForUser(){
+        if(productsViewModel.productsScreenState.fetchedBrandNames){
+            productAdapter = ProductAdapter(requireActivity(), productsViewModel.productsScreenState.brandProducts)
+            binding?.productsRecyclerView?.adapter = productAdapter
+
+            brandAdapter = BrandAdapter(requireActivity(), productsViewModel.productsScreenState.brandNames, this)
+            binding?.brandsRecyclerView?.adapter = brandAdapter
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        displayInForForUser()
     }
 }

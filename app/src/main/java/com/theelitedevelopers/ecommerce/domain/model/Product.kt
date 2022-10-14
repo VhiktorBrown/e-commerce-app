@@ -9,20 +9,20 @@ data class Product(
     val id : Int,
     val name : String,
     val brand : String,
-    val price : String,
+    val price : String?,
     @SerializedName("price_sign")
-    val priceSign : String,
-    val currency : String,
+    val priceSign : String?,
+    val currency : String?,
     @SerializedName("image_link")
-    val imageLink : String,
+    val imageLink : String?,
     @SerializedName("product_link")
     val productLink : String,
     @SerializedName("website_link")
     val websiteLink : String,
     val description : String,
-    val category : String,
+    val category : String?,
     @SerializedName("product_type")
-    val productType : String,
+    val productType : String?,
     @SerializedName("tag_list")
     val tagList : List<String>,
     @SerializedName("api_featured_image")
@@ -30,7 +30,12 @@ data class Product(
     @SerializedName("product_colors")
     val productColors : List<ProductColor>
 ) : Parcelable {
-    fun addPriceSign() : String{
-        return "$priceSign $price";
+    fun addPriceSign() : String?{
+        return if(priceSign != null){
+            "$priceSign $price"
+        }else {
+            "$ $price"
+        }
+
     }
 }

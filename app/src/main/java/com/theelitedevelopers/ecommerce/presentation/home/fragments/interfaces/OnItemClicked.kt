@@ -12,5 +12,5 @@ package com.theelitedevelopers.ecommerce.presentation.home.fragments.interfaces
  * getting the Clicked BrandName
  */
 interface OnItemClicked {
-    fun OnClicked(brandName : String)
+    fun OnClicked(brandName : String, position : Int)
 }

@@ -9,7 +9,6 @@ import com.theelitedevelopers.ecommerce.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import java.text.FieldPosition
 import javax.inject.Inject
 
 /**
@@ -29,7 +28,9 @@ class ProductsViewModel @Inject constructor(
     private val productUseCases: ProductUseCases
 ) : ViewModel() {
     var productsScreenState : ProductsScreenState = ProductsScreenState()
+
     private var productsScreenStateLiveData : MutableLiveData<ProductsScreenState> = MutableLiveData<ProductsScreenState>()
+    private var productListLiveData : MutableLiveData<List<Product>> = MutableLiveData<List<Product>>()
 
     init {
         fetchProducts()
@@ -42,9 +43,19 @@ class ProductsViewModel @Inject constructor(
      * or a fragment can implement this function to monitor
      * data changes and make necessary changes in our UI.
      */
-     fun fetchProductData() : MutableLiveData<ProductsScreenState> {
-        return productsScreenStateLiveData;
+
+    fun setFetchedBrandNamesValue(){
+        productsScreenState = productsScreenState.copy(fetchedBrandNames = true)
+        setProductData(productsScreenState)
     }
+
+    private fun setProductsList(list: List<Product>){
+        productListLiveData.value = list
+    }
+
+     fun fetchProductData() : MutableLiveData<ProductsScreenState> {
+        return productsScreenStateLiveData
+     }
 
     private fun setProductData(productsScreenState: ProductsScreenState){
         productsScreenStateLiveData.value = productsScreenState
@@ -64,18 +75,24 @@ class ProductsViewModel @Inject constructor(
 
                 }
                 is Resource.Success -> {
-                    productsScreenState = productsScreenState.copy(isLoading = false, message = null)
-                    productsScreenState = productsScreenState.copy(products = result.data?: emptyList())
+                    /**
+                     * Here, we save our General Product List
+                     * in our LiveData variable seeing as we'll
+                     * be needing it from time to time when user
+                     * a different brand.
+                     */
+                    setProductsList(result.data!!)
 
-                    setProductData(productsScreenState)
+                    productsScreenState = productsScreenState.copy(isLoading = false, message = null)
+                    fetchBrandProducts("All", result.data)
 
                     /**
                      * Next, with the List that we have,
                      * we need to sieve out all the brand
-                     * names without avoiding duplicate brand
+                     * names while avoiding duplicate brand
                      * names showing up
                      */
-                    fetchBrandNames(productsScreenStateLiveData.value!!.products)
+                    fetchBrandNames(productListLiveData.value!!)
                 }
             }
         }.launchIn(viewModelScope)
@@ -103,6 +120,11 @@ class ProductsViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    //This function calls the main function that fetches the BrandProducts
+    fun fetchBrandProducts(brandName: String){
+        fetchBrandProducts(brandName, productListLiveData.value!!)
+    }
+
     /**
      * This function fetches all the products a brand has.
      * So, it calls another class that has the function that
@@ -110,28 +132,23 @@ class ProductsViewModel @Inject constructor(
      * the brand name passed as an argument.
      */
 
-     fun fetchBrandProducts(brandName: String, products: List<Product>){
+    private fun fetchBrandProducts(brandName: String, products: List<Product>){
         productUseCases.fetchBrandProducts(brandName, products).onEach { result ->
-            when(result) {
-                is Resource.Success -> {
-                   productsScreenState = productsScreenState.copy(brandProducts = result.data!!, message = null)
+            when (result) {
+                is Resource.Loading -> {
+                    productsScreenState = productsScreenState.copy(isLoading = true, message = null)
+                    setProductData(productsScreenState)
                 }
-                else -> {
-                   productsScreenState = productsScreenState.copy(message = "Could not fetch brand products")
+                is Resource.Error -> {
+                    productsScreenState = productsScreenState.copy(isLoading = false, message = "Could not fetch products")
+                    setProductData(productsScreenState)
+                }
+                is Resource.Success -> {
+                    productsScreenState = productsScreenState.copy(isLoading = false, message = null, brandProducts = result.data!!)
+                    setProductData(productsScreenState)
                 }
             }
-            setProductData(productsScreenState)
         }.launchIn(viewModelScope)
     }
 
-//    /**
-//     * THis function fetches just the brand name from the
-//     * position passed as an argument
-//     */
-//    private fun fetchBrandName(brandName: String){
-//        for(product in productsScreenState.products){
-//            if(brandName == product.brand){
-//
-//            }
-//        }
 }
